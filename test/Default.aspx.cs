@@ -21,7 +21,8 @@ namespace test
         private static string GetRedirectUri()
         {
             var url = HttpContext.Current.Request.Url;
-            string redirectUri = HttpUtility.UrlEncode(url.GetLeftPart(UriPartial.Path) + "/");
+            string urll = url.GetLeftPart(UriPartial.Path).Split(':')[0] + url.GetLeftPart(UriPartial.Path).Split(':')[1];
+            string redirectUri = HttpUtility.UrlEncode(urll + "/");
             return redirectUri;
         }
 
