@@ -20,6 +20,7 @@ namespace test
 
         private static string GetRedirectUri()
         {
+            return "http://linkbrowsing.apphb.com";
             var url = HttpContext.Current.Request.Url;
             string urll = url.GetLeftPart(UriPartial.Path).Split(':')[0] + url.GetLeftPart(UriPartial.Path).Split(':')[1];
             string redirectUri = HttpUtility.UrlEncode(urll + "/");
@@ -69,6 +70,7 @@ namespace test
 
         protected void Page_Load(object sender, EventArgs e)
         {
+           
             GridView1.PageIndexChanging += new GridViewPageEventHandler(GridView1_PageIndexChanging);
 
             if (Request.Params["code"] == null)
