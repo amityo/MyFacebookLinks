@@ -20,7 +20,9 @@ namespace test
 
         private static string GetRedirectUri()
         {
-            return "http://linkbrowsing.apphb.com";
+            return HttpUtility.UrlEncode("http://linkbrowsing.apphb.com/");
+
+
             var url = HttpContext.Current.Request.Url;
             string urll = url.GetLeftPart(UriPartial.Path).Split(':')[0] + url.GetLeftPart(UriPartial.Path).Split(':')[1];
             string redirectUri = HttpUtility.UrlEncode(urll + "/");
