@@ -31,13 +31,13 @@ namespace test
 
         private string GetAccessToken()
         {
-            if (HttpRuntime.Cache["access_token"] == null)
+            if (Session["access_token"] == null)
             {
                 Dictionary<string, string> args = GetOauthTokens(Request.Params["code"]);
-                HttpRuntime.Cache.Insert("access_token", args["access_token"], null, DateTime.Now.AddMinutes(Convert.ToDouble(args["expires"])), TimeSpan.Zero);
+                Session.Add("access_token", args["access_token"]);
             }
 
-            return HttpRuntime.Cache["access_token"].ToString();
+            return Session["access_token"].ToString();
         }
 
 
@@ -73,7 +73,7 @@ namespace test
         protected void Page_Load(object sender, EventArgs e)
         {
            
-            GridView1.PageIndexChanging += new GridViewPageEventHandler(GridView1_PageIndexChanging);
+            GridView1.PageIndexChanging += GridView1_PageIndexChanging;
 
             if (Request.Params["code"] == null)
             {
