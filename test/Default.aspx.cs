@@ -95,12 +95,12 @@ namespace test
             var db = new FacebookDataContext(fb);
             
             var links = (from link in db.Link
-                        where link.Owner == (long?)db.Me
+                        where link.Owner == db.Me.Value
                         select link).ToList();
 
+
             var youtube = from link in links
-                         where link.Url.Contains("youtube")
-                         where link.Url.Contains("vimeo")
+                         where link.Url.Contains("youtube") 
                          orderby link.CreatedTime descending
                          select link;
 
