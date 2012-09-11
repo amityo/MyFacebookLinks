@@ -14,6 +14,7 @@
      AllowPaging="True"   
             AllowSorting="True"
             AutoGenerateColumns="False"
+            DataKeyNames="LinkID"
             GridLines="None"
             CssClass="mGrid"
             PagerStyle-CssClass="pgr"

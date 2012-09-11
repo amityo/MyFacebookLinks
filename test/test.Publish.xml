@@ -1,2 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<publishData />
+<publishData>
+  <publishProfile publishUrl="C:\Users\user\Desktop\wu_compiled" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="Web.config" publishTime="09/11/2012 21:18:03" />
+    <file relUrl="css/grd_alt.png" publishTime="03/03/2008 18:23:50" />
+    <file relUrl="Scripts/jquery-1.4.1.js" publishTime="09/02/2012 22:04:30" />
+    <file relUrl="css/grd_pgr.png" publishTime="03/03/2008 18:20:56" />
+    <file relUrl="bin/Facebook.pdb" publishTime="09/10/2012 23:41:21" />
+    <file relUrl="bin/Facebook.xml" publishTime="09/09/2012 22:26:19" />
+    <file relUrl="bin/Facebook.dll" publishTime="09/10/2012 23:41:22" />
+    <file relUrl="bin/Facebook.Linq.dll" publishTime="09/10/2012 23:42:40" />
+    <file relUrl="Scripts/jquery-1.4.1-vsdoc.js" publishTime="09/02/2012 22:04:30" />
+    <file relUrl="css/style.css" publishTime="01/23/2009 16:40:58" />
+    <file relUrl="bin/test.dll" publishTime="09/11/2012 00:34:36" />
+    <file relUrl="bin/Facebook.Linq.pdb" publishTime="09/10/2012 23:42:40" />
+    <file relUrl="css/grd_head.png" publishTime="03/03/2008 17:52:14" />
+    <file relUrl="bin/test.pdb" publishTime="09/11/2012 00:34:36" />
+    <file relUrl="Default.aspx" publishTime="09/09/2012 22:29:26" />
+    <file relUrl="Scripts/jquery-1.4.1.min.js" publishTime="09/02/2012 22:04:31" />
+  </publishProfile>
+</publishData>

@@ -7,20 +7,22 @@ using System.Web.UI.WebControls;
 using Facebook;
 using System.Net;
 using System.IO;
+using System.Configuration;
 
 namespace test
 {
     public partial class _Default : System.Web.UI.Page
     {
-        string m_clientId = "348858645200865";
-        string m_clientSecret = "b6a16ea47534cf2ef2c2f56b68d8ebea";
+        string m_clientId;
+        string m_clientSecret;
+        string m_redirectUri ="";
         string m_scope = "read_stream";
 
         // the getting the token code is from here: http://multitiered.wordpress.com/tag/c/
 
-        private static string GetRedirectUri()
+        private string GetRedirectUri()
         {
-            return HttpUtility.UrlEncode("http://linkbrowsing.apphb.com/");
+            return HttpUtility.UrlEncode(m_redirectUri);
 
 
             var url = HttpContext.Current.Request.Url;
@@ -72,7 +74,12 @@ namespace test
 
         protected void Page_Load(object sender, EventArgs e)
         {
-           
+            string prefix = ConfigurationManager.AppSettings["mode"];
+            m_redirectUri = ConfigurationManager.AppSettings[prefix + "_redirectUri"];
+            m_clientId= ConfigurationManager.AppSettings[prefix + "_clientId"];
+            m_clientSecret = ConfigurationManager.AppSettings[prefix + "_clientSecret"];
+
+
             GridView1.PageIndexChanging += GridView1_PageIndexChanging;
 
             if (Request.Params["code"] == null)
@@ -95,12 +102,12 @@ namespace test
             var db = new FacebookDataContext(fb);
             
             var links = (from link in db.Link
-                        where link.Owner == db.Me.Value
+                        where link.Owner == db.Me
                         select link).ToList();
 
 
             var youtube = from link in links
-                         where link.Url.Contains("youtube") 
+                          where link.Url.Contains("youtube") 
                          orderby link.CreatedTime descending
                          select link;
 
@@ -114,7 +121,7 @@ namespace test
             });
 
             var fixedList = (from link in youtube
-                             select new { link.LinkId, link.OwnerComment, link.CreatedTime, link.Title, link.Summary, link.Url, link.Picture }).ToList();
+                             select new { link.OwnerComment, link.CreatedTime, link.Title, link.Summary, link.Url, link.Picture }).ToList();
             GridView1.DataSource = fixedList;
             GridView1.DataBind();
         }
