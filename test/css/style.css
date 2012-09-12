@@ -20,7 +20,7 @@ h2 {
 }
 
 
-.center {   margin-left: 30%;   width: 8em; }
+.center {width:800px; margin:0px auto;}
 .textCenter {text-align:center;}
 
 .mGrid {width: 100%; background-color: #fff; margin: 5px 0 10px 0; border: solid 1px #525252; border-collapse:collapse; }
@@ -32,3 +32,5 @@ h2 {
     .mGrid .pgr td { border-width: 0; padding: 0 6px; border-left: solid 1px #666; font-weight: bold; color: #fff; line-height: 12px; }   
     .mGrid .pgr a { color: #666; text-decoration: none; }
     .mGrid .pgr a:hover { color: #000; text-decoration: none; }
+    
+    

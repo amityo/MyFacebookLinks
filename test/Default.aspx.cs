@@ -8,6 +8,7 @@ using Facebook;
 using System.Net;
 using System.IO;
 using System.Configuration;
+using facebook.Tables;
 
 namespace test
 {
@@ -17,7 +18,7 @@ namespace test
         string m_clientSecret;
         string m_redirectUri ="";
         string m_scope = "read_stream";
-
+        FacebookDataContext db;
         // the getting the token code is from here: http://multitiered.wordpress.com/tag/c/
 
         private string GetRedirectUri()
@@ -92,14 +93,30 @@ namespace test
             }
             else
             {
+                var fb = new FacebookClient(GetAccessToken());
+                db = new FacebookDataContext(fb);
                 FqlToLinqSample();
+            }
+        }
+
+        public void RowDataBounded(object sender, GridViewRowEventArgs eventArgs)
+        {
+            if (eventArgs.Row.RowType == DataControlRowType.DataRow)
+            {
+                Link dataitem = eventArgs.Row.DataItem as Link;
+                Label likes = eventArgs.Row.FindControl("likes") as Label;
+
+                int count = (from like in db.Like
+                        where like.ObjectId == new ObjectId(dataitem.LinkId.Value)
+                        select like).Count();
+
+                likes.Text = count.ToString();
             }
         }
 
         private void FqlToLinqSample()
         {
-            var fb = new FacebookClient(GetAccessToken());
-            var db = new FacebookDataContext(fb);
+            
             
             var links = (from link in db.Link
                         where link.Owner == db.Me
@@ -110,6 +127,7 @@ namespace test
                          orderby link.CreatedTime descending
                          select link;
 
+
             var list = youtube.ToList();
             list.ForEach(x =>
             {
@@ -119,9 +137,7 @@ namespace test
                 }
             });
 
-            var fixedList = (from link in youtube
-                             select new { link.OwnerComment, link.CreatedTime, link.Title, link.Summary, link.Url, link.Picture }).ToList();
-            GridView1.DataSource = fixedList;
+            GridView1.DataSource = list;
             GridView1.DataBind();
         }
 
@@ -130,11 +146,6 @@ namespace test
         {
             GridView1.PageIndex = e.NewPageIndex;
             GridView1.DataBind();
-        }
-
-        protected void searchButton_Click1(object sender, EventArgs e)
-        {
-
         }
 
     }

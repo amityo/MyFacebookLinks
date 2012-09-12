@@ -12,8 +12,8 @@
             <h1>Link Browsing</h1>
             <h2>browse your facebook links today!</h2>
         </header>
-        <aside id="leftSide">
-        </aside>
+        <!--<aside>
+        </aside>-->
         <section class="center">
             <article>
             <form id="form1" runat="server">
@@ -24,15 +24,18 @@
                     GridLines="None"
                     CssClass="mGrid"
                     PagerStyle-CssClass="pgr"
-                    AlternatingRowStyle-CssClass="alt"
-                    Width="50%" HorizontalAlign="Center"
-                    >  
+                    AlternatingRowStyle-CssClass="alt" OnRowDataBound="RowDataBounded">  
                     <Columns>  
-                            <asp:ImageField DataImageUrlField="Picture"  />  
-                            <asp:HyperLinkField DataNavigateUrlFields="Url" HeaderText="Title"  DataTextField="Title"/> 
-                            <asp:BoundField DataField="OwnerComment" HeaderText="Comment" ReadOnly="True"   />  
-                            <asp:BoundField DataField="CreatedTime" HeaderText="CreatedTime" ReadOnly="True"   /> 
-                            <asp:BoundField DataField="Summary" HeaderText="Summary" ReadOnly="True"/>  
+                            <asp:ImageField DataImageUrlField="Picture" />  
+                            <asp:HyperLinkField DataNavigateUrlFields="Url" HeaderText="Title" DataTextField="Title" /> 
+                            <asp:BoundField DataField="OwnerComment" HeaderText="Comment" ReadOnly="True" />  
+                            <asp:BoundField DataField="CreatedTime" HeaderText="CreatedTime" ReadOnly="True" /> 
+                            <asp:BoundField DataField="Summary" HeaderText="Summary" ReadOnly="True" ItemStyle-Width="25%"/>
+                            <asp:TemplateField HeaderText="Likes">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" ID="likes"></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                     </Columns>  
                 </asp:GridView>  
             </form>
