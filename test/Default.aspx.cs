@@ -96,28 +96,6 @@ namespace test
             }
         }
 
-        public void searchButton_Click(object sender, EventArgs e)
-        {
-
-            var fb = new FacebookClient(GetAccessToken());
-            var db = new FacebookDataContext(fb);
-
-            var links = (from link in db.Link
-                         where link.Owner == db.Me
-                         select link).ToList();
-
-
-            var youtube = from link in links
-                          where link.Url.Contains(search.Text)
-                          orderby link.CreatedTime descending
-                          select link;
-
-            var fixedList = (from link in youtube
-                             select new { link.OwnerComment, link.CreatedTime, link.Title, link.Summary, link.Url, link.Picture }).ToList();
-            GridView1.DataSource = fixedList;
-            GridView1.DataBind();
-        }
-
         private void FqlToLinqSample()
         {
             var fb = new FacebookClient(GetAccessToken());
