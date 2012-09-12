@@ -81,7 +81,7 @@ namespace test
 
 
             GridView1.PageIndexChanging += GridView1_PageIndexChanging;
-
+                
             if (Request.Params["code"] == null)
             {
                 string redirectUri = GetRedirectUri();
@@ -96,6 +96,28 @@ namespace test
             }
         }
 
+        public void searchButton_Click(object sender, EventArgs e)
+        {
+
+            var fb = new FacebookClient(GetAccessToken());
+            var db = new FacebookDataContext(fb);
+
+            var links = (from link in db.Link
+                         where link.Owner == db.Me
+                         select link).ToList();
+
+
+            var youtube = from link in links
+                          where link.Url.Contains(search.Text)
+                          orderby link.CreatedTime descending
+                          select link;
+
+            var fixedList = (from link in youtube
+                             select new { link.OwnerComment, link.CreatedTime, link.Title, link.Summary, link.Url, link.Picture }).ToList();
+            GridView1.DataSource = fixedList;
+            GridView1.DataBind();
+        }
+
         private void FqlToLinqSample()
         {
             var fb = new FacebookClient(GetAccessToken());
@@ -107,7 +129,6 @@ namespace test
 
 
             var youtube = from link in links
-                          where link.Url.Contains("youtube") 
                          orderby link.CreatedTime descending
                          select link;
 
@@ -126,10 +147,16 @@ namespace test
             GridView1.DataBind();
         }
 
+
         void GridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GridView1.PageIndex = e.NewPageIndex;
             GridView1.DataBind();
+        }
+
+        protected void searchButton_Click1(object sender, EventArgs e)
+        {
+
         }
 
     }
