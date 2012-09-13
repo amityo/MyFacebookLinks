@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Facebook;
 using System.Net;
@@ -105,12 +106,22 @@ namespace test
             {
                 Link dataitem = eventArgs.Row.DataItem as Link;
                 Label likes = eventArgs.Row.FindControl("likes") as Label;
+                HtmlGenericControl tooltipDiv = eventArgs.Row.FindControl("tooltip") as HtmlGenericControl;
 
-                int count = (from like in db.Like
-                        where like.ObjectId == new ObjectId(dataitem.LinkId.Value)
-                        select like).Count();
+                var likeQuery = from like in db.Like
+                                where like.ObjectId == new ObjectId(dataitem.LinkId.Value)
+                                select like.UserId;
 
-                likes.Text = count.ToString();
+                var users = (from user in db.User where likeQuery.Contains(user.Uid) select new {user.FirstName,user.LastName}).ToList();
+
+                string str = "";
+                users.ForEach(x => str += x.FirstName + " " + x.LastName + "<br/>");
+                //users.ToList().ForEach(x=>str += x.Name + Environment.NewLine);
+                likes.Text = users.Count.ToString();
+                if (users.Count > 0)
+                    tooltipDiv.InnerHtml = str;
+                else
+                    tooltipDiv.Visible = false;
             }
         }
 

@@ -62,6 +62,7 @@
     <Content Include="css\grd_alt.png" />
     <Content Include="css\grd_head.png" />
     <Content Include="css\grd_pgr.png" />
+    <Content Include="css\like.jpeg" />
     <Content Include="css\style.css" />
     <Content Include="Default.aspx" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
