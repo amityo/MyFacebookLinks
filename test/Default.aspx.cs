@@ -10,7 +10,7 @@ using System.Net;
 using System.IO;
 using System.Configuration;
 using facebook.Tables;
-
+using System.Linq;
 namespace test
 {
     public partial class _Default : System.Web.UI.Page
@@ -33,29 +33,48 @@ namespace test
             db = new FacebookDataContext(fb);
             if (!IsPostBack)
             {
+                QueryFriendList();
                 QueryLinks();
             }
+        }
+
+        private void QueryFriendList()
+        {
+            var friendUids = from friend in db.Friend
+                             where friend.Uid1 == db.Me
+                             select friend.Uid2;
+
+            var names = (from user in db.User
+                        where friendUids.Contains(user.Uid)
+                        select new {user.Uid,user.FirstName,user.LastName}).ToDictionary(x=>x.Uid.Value,x=>x.FirstName + " " + x.LastName);
+
+            ViewState.Add("users", names);
         }
 
         public void RowDataBounded(object sender, GridViewRowEventArgs eventArgs)
         {
             if (eventArgs.Row.RowType == DataControlRowType.DataRow)
             {
-                Link dataitem = eventArgs.Row.DataItem as Link;
+                ExtendedLink elink = eventArgs.Row.DataItem as ExtendedLink;
                 Label likes = eventArgs.Row.FindControl("likes") as Label;
                 HtmlGenericControl tooltipDiv = eventArgs.Row.FindControl("tooltip") as HtmlGenericControl;
 
-                var likeQuery = from like in db.Like
-                                where like.ObjectId == new ObjectId(dataitem.LinkId.Value)
-                                select like.UserId;
+                if (elink.Like == null)
+                {
+                    var likeQuery = (from like in db.Like
+                                    where like.ObjectId == new ObjectId(elink.LinkId.Value)
+                                    select like.UserId).ToList();
 
-                var users = (from user in db.User where likeQuery.Contains(user.Uid) select new { user.FirstName, user.LastName }).ToList();
+                    var users = (Dictionary<string, string>)ViewState["users"];
+                    string str = string.Empty;
+                    likeQuery.ForEach(x => str += users[x.Value] + " " + "<br/>");
+                    elink.Like = new LikeString(str,likeQuery.Count);
+                }
+                //var users = (from user in db.User where likeQuery.Contains(user.Uid) select new { user.FirstName, user.LastName }).ToList();
 
-                string str = "";
-                users.ForEach(x => str += x.FirstName + " " + x.LastName + "<br/>");
-                likes.Text = users.Count.ToString();
-                if (users.Count > 0)
-                    tooltipDiv.InnerHtml = str;
+                likes.Text = elink.Like.Count.ToString();
+                if (elink.Like.Count > 0)
+                    tooltipDiv.InnerHtml = elink.Like.ToString();
                 else
                     tooltipDiv.Visible = false;
             }
@@ -67,31 +86,32 @@ namespace test
                         where link.Owner == db.Me
                         select link).ToList();
 
+            var extended = (from link in links
+                           orderby link.CreatedTime descending
+                            select new ExtendedLink(link)).ToList();
+            
 
-            var orderByDescending = from link in links
-                         orderby link.CreatedTime descending
-                         select link;
 
+            ManipulateLinks(extended);
 
-            var list = orderByDescending.ToList();
-            ManipulateLinks(list);
+            ViewState.Add("dataSource", extended);
+            ViewState.Add("currentDataSource", extended);
 
-            ViewState.Add("dataSource", list);
-            ViewState.Add("currentDataSource", list);
-
-            BindGrid(list, 0);
+            BindGrid(extended, 0);
         }
 
-        private void ManipulateLinks(List<Link> links)
+        private void ManipulateLinks(IEnumerable<ExtendedLink> links)
         {
-            links.ForEach(x =>
+            foreach (var item in links)
             {
-                if (x.Url.Contains("gdata"))
+                if (item.Url.Contains("gdata"))
                 {
-                    x.Url = "http://www.youtube.com/watch?v=" + x.Url.Split('/').Last();
+                    item.Url = "http://www.youtube.com/watch?v=" + item.Url.Split('/').Last();
                 }
-            });
+            }
         }
+
+
         void GridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             object source =  ViewState["currentDataSource"];
@@ -100,7 +120,7 @@ namespace test
 
         public void SerachUrlClick(object sender, EventArgs eventArgs)
         {
-            List<Link> list = (List<Link>)ViewState["dataSource"];
+            List<ExtendedLink> list = (List<ExtendedLink>)ViewState["dataSource"];
             var currentList = list.Where(x => x.Url.Contains(urlSearch.Text)).ToList();
             ViewState.Add("currentDataSource", currentList);
 
