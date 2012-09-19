@@ -39,7 +39,7 @@ Inherits="test._Default" %>
           <article>
             <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True"
             AutoGenerateColumns="False" GridLines="None" CssClass="mGrid" PagerStyle-CssClass="pgr"
-            AlternatingRowStyle-CssClass="alt" OnRowDataBound="RowDataBounded">
+            RowStyle-CssClass="alt" OnRowDataBound="RowDataBounded">
               <Columns>
                 <asp:ImageField DataImageUrlField="Picture" />
                 <asp:HyperLinkField DataNavigateUrlFields="Url" HeaderText="Title" DataTextField="Title"
@@ -51,7 +51,7 @@ Inherits="test._Default" %>
                 <asp:BoundField DataField="Summary" HeaderText="Summary" ReadOnly="True"
                 ItemStyle-Width="25%" />
                 <asp:TemplateField HeaderText="Likes" ItemStyle-CssClass="tooltipable"
-                ItemStyle-Width="5%">
+                ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
                   <ItemTemplate>
                     <asp:Image ID="Image1" ImageUrl="~/css/like.jpeg" runat="server" Width="15px" />
                     <asp:Label runat="server" ID="likes"></asp:Label>
