@@ -10,7 +10,7 @@ using System.Net;
 using System.IO;
 using System.Configuration;
 using facebook.Tables;
-
+using System.Linq;
 namespace test
 {
     public partial class _Default : System.Web.UI.Page
@@ -121,29 +121,14 @@ namespace test
         public void SerachUrlClick(object sender, EventArgs eventArgs)
         {
             List<ExtendedLink> list = (List<ExtendedLink>)ViewState["dataSource"];
-            List<ExtendedLink> currentList = FilterBySearch(list, searchDDL.Text);
-            if (currentList != null)
-            {
-                ViewState.Add("currentDataSource", currentList);
-                BindGrid(currentList, 0);
-            }
+            var currentList = list.Where(x => x.Url.Contains(urlSearch.Text)).ToList();
+            ViewState.Add("currentDataSource", currentList);
+
+            BindGrid(currentList, 0);
         }
 
-        private List<ExtendedLink> FilterBySearch(List<ExtendedLink> source,string filterBy)
-        {
-            if (filterBy == "URL")
-            {
-                return source.Where(x => x.Url.Contains(searchBox.Text)).ToList();
-            }
-            else if (filterBy == "Title")
-            {
-                return source.Where(x => x.Title.Contains(searchBox.Text)).ToList();
-            }
-            return null;
-        }
         public void AllClicked(object sender, EventArgs eventArgs)
         {
-            searchBox.Text = string.Empty;
             object originalSource = ViewState["dataSource"];
             ViewState.Add("currentDataSource", originalSource);
             BindGrid(originalSource, 0);

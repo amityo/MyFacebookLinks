@@ -30,41 +30,42 @@ Inherits="test._Default" %>
         </header>
         <section class="center">
             <header style="width:500px;margin:auto;">
-                <asp:Label id="Label1" runat="server" AssociatedControlID="urlSearch">Search:</asp:Label>
-                <asp:TextBox id="urlSearch" runat="server" Width="100px" required="required"></asp:TextBox>
-                <asp:DropDownList runat="server" ID="searchDDL" Width="100px">
-                    <asp:ListItem Value="URL">URL</asp:ListItem>
-                    <asp:ListItem Value="Title">Title</asp:ListItem>
-                </asp:DropDownList>
-                <asp:Button ID="Button1" runat="server" Text="Search" OnClick=SerachUrlClick Width="80px" Height="25px" />
-                <br />
-                <asp:Button ID="Button2" runat="server" Text="All" OnClick="AllClicked" />
+                <asp:Label id="Label1" runat="server" AssociatedControlID="searchBox">Search:</asp:Label>
+                <asp:TextBox ID="searchBox" runat="server" Width="100px"></asp:TextBox>
+                <div class="ddlist-div">
+                    <asp:DropDownList runat="server" ID="searchDDL" CssClass="ddlist">
+                        <asp:ListItem Value="URL">URL</asp:ListItem>
+                        <asp:ListItem Value="Title">Title</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+                <asp:Button CssClass="search" ID="Button1" runat="server" Text="Go!" OnClick="SerachUrlClick" />
+                <asp:Button CssClass="search" ID="Button2" runat="server" Text="All" OnClick="AllClicked"/>
             </header>
-          <article>
-            <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True"
-            AutoGenerateColumns="False" GridLines="None" CssClass="mGrid" PagerStyle-CssClass="pgr"
-            RowStyle-CssClass="alt" OnRowDataBound="RowDataBounded">
-              <Columns>
-                <asp:ImageField DataImageUrlField="Picture" />
-                <asp:HyperLinkField DataNavigateUrlFields="Url" HeaderText="Title" DataTextField="Title"
-                />
-                <asp:BoundField DataField="OwnerComment" HeaderText="Comment" ReadOnly="True"
-                />
-                <asp:BoundField DataField="CreatedTime" HeaderText="CreatedTime" ReadOnly="True"
-                />
-                <asp:BoundField DataField="Summary" HeaderText="Summary" ReadOnly="True"
-                ItemStyle-Width="25%" />
-                <asp:TemplateField HeaderText="Likes" ItemStyle-CssClass="tooltipable"
-                ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
-                  <ItemTemplate>
-                    <asp:Image ID="Image1" ImageUrl="~/css/like.jpeg" runat="server" Width="15px" />
-                    <asp:Label runat="server" ID="likes"></asp:Label>
-                    <div class="tooltip" id="tooltip" runat="server">abc</div>
-                  </ItemTemplate>
-                </asp:TemplateField>
-              </Columns>
-            </asp:GridView>
-          </article>
+            <article>
+                <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True"
+                AutoGenerateColumns="False" GridLines="None" CssClass="mGrid" PagerStyle-CssClass="pgr"
+                RowStyle-CssClass="alt" OnRowDataBound="RowDataBounded">
+                  <Columns>
+                    <asp:ImageField DataImageUrlField="Picture" ControlStyle-Width="120px" ControlStyle-Height="80px" />
+                    <asp:HyperLinkField DataNavigateUrlFields="Url" HeaderText="Title" DataTextField="Title"
+                    />
+                    <asp:BoundField ItemStyle-CssClass="textCenter" DataField="OwnerComment" HeaderText="Comment" ReadOnly="True"
+                    />
+                    <asp:BoundField DataField="CreatedTime" HeaderText="CreatedTime" ReadOnly="True"
+                    />
+                    <asp:BoundField DataField="Summary" HeaderText="Summary" ReadOnly="True"
+                    ItemStyle-Width="25%" />
+                    <asp:TemplateField HeaderText="Likes" ItemStyle-CssClass="tooltipable"
+                    ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
+                      <ItemTemplate>
+                        <asp:Image ID="Image1" ImageUrl="~/css/like.jpeg" runat="server" Width="15px" />
+                        <asp:Label runat="server" ID="likes"></asp:Label>
+                        <div class="tooltip" id="tooltip" runat="server">abc</div>
+                      </ItemTemplate>
+                    </asp:TemplateField>
+                  </Columns>
+                </asp:GridView>
+            </article>
         </section>
         <footer class="textCenter"> <a href="mailto:amit.yogev90@gmail.com">Amit Yogev</a>
         </footer>

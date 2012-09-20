@@ -6,3 +6,11 @@ C:\Users\user\Documents\University\88-280 Data Structures and Algorithms\test\te
 C:\Users\user\Documents\University\88-280 Data Structures and Algorithms\test\test\bin\Facebook.pdb
 C:\Users\user\Documents\University\88-280 Data Structures and Algorithms\test\test\bin\Facebook.xml
 C:\Users\user\Documents\University\88-280 Data Structures and Algorithms\test\test\bin\Facebook.Linq.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\bin\test.dll
+C:\Users\Yogev\Documents\GitHub\test\test\bin\test.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\bin\Facebook.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\bin\Facebook.xml
+C:\Users\Yogev\Documents\GitHub\test\test\bin\Facebook.Linq.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\obj\Debug\test.csprojResolveAssemblyReference.cache
+C:\Users\Yogev\Documents\GitHub\test\test\obj\Debug\test.dll
+C:\Users\Yogev\Documents\GitHub\test\test\obj\Debug\test.pdb
