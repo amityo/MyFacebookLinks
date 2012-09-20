@@ -28,14 +28,18 @@ Inherits="test._Default" %>
            <h1>Link Browsing</h1>
            <h2>browse your facebook links today!</h2>
         </header>
-        <aside>
-        <label>Search By Url:</label>
-        <asp:TextBox id="urlSearch" runat="server" required></asp:TextBox>
-        <asp:Button runat="server" Text="Search" OnClick=SerachUrlClick />
-        <br />
-        <asp:Button runat="server" Text="All" OnClick=AllClicked />
-        </aside>
         <section class="center">
+            <header style="width:500px;margin:auto;">
+                <asp:Label id="Label1" runat="server" AssociatedControlID="urlSearch">Search:</asp:Label>
+                <asp:TextBox id="urlSearch" runat="server" Width="100px" required="required"></asp:TextBox>
+                <asp:DropDownList runat="server" ID="searchDDL" Width="100px">
+                    <asp:ListItem Value="URL">URL</asp:ListItem>
+                    <asp:ListItem Value="Title">Title</asp:ListItem>
+                </asp:DropDownList>
+                <asp:Button ID="Button1" runat="server" Text="Search" OnClick=SerachUrlClick Width="80px" Height="25px" />
+                <br />
+                <asp:Button ID="Button2" runat="server" Text="All" OnClick="AllClicked" />
+            </header>
           <article>
             <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True"
             AutoGenerateColumns="False" GridLines="None" CssClass="mGrid" PagerStyle-CssClass="pgr"
