@@ -10,6 +10,7 @@ using System.Net;
 using System.IO;
 using System.Configuration;
 using facebook.Tables;
+using System.Globalization;
 
 namespace test
 {
@@ -102,6 +103,7 @@ namespace test
 
         private void ManipulateLinks(IEnumerable<ExtendedLink> links)
         {
+            
             foreach (var item in links)
             {
                 if (item.Url.Contains("gdata"))
@@ -133,11 +135,13 @@ namespace test
         {
             if (filterBy == "URL")
             {
-                return source.Where(x => x.Url.Contains(searchBox.Text)).ToList();
+                return source.Where(x => x.Url.IndexOf(searchBox.Text, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
+                //return source.Where(x => x.Url.Contains(searchBox.Text)).ToList();
             }
             else if (filterBy == "Title")
             {
-                return source.Where(x => x.Title.Contains(searchBox.Text)).ToList();
+                return source.Where(x => x.Title.IndexOf(searchBox.Text, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
+                //return source.Where(x => x.Title.Contains(searchBox.Text)).ToList();
             }
             return null;
         }
