@@ -69,15 +69,26 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\colorbox.css" />
+    <Content Include="css\Facebook.gif" />
     <Content Include="css\grd_alt.png" />
     <Content Include="css\grd_head.png" />
     <Content Include="css\grd_pgr.png" />
+    <Content Include="css\images\border.png" />
+    <Content Include="css\images\controls.png" />
+    <Content Include="css\images\loading.gif" />
+    <Content Include="css\images\loading_background.png" />
+    <Content Include="css\images\overlay.png" />
     <Content Include="css\like.jpeg" />
     <Content Include="css\style.css" />
     <Content Include="Default.aspx" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery.colorbox-min.js" />
     <Content Include="Scripts\jquery.colorbox.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -103,6 +114,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Profile1.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

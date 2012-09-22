@@ -1,0 +1,8 @@
+C:\Users\Yogev\Documents\GitHub\test\test\bin\test.dll
+C:\Users\Yogev\Documents\GitHub\test\test\bin\test.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\bin\Facebook.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\bin\Facebook.xml
+C:\Users\Yogev\Documents\GitHub\test\test\bin\Facebook.Linq.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\obj\Release\test.csprojResolveAssemblyReference.cache
+C:\Users\Yogev\Documents\GitHub\test\test\obj\Release\test.dll
+C:\Users\Yogev\Documents\GitHub\test\test\obj\Release\test.pdb

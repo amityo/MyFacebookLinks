@@ -1,0 +1,90 @@
+﻿* {
+    padding: 0; 
+    margin: 0; 
+}
+body {
+	font: 11px Tahoma;
+	background-color: #F7F7E9;
+}
+h1 {
+    font: bold 32px Times;
+	color: #666;
+	text-align: center;
+	padding-top: 20px;    
+}
+
+h2 {
+    font: bold 16px Times;
+	text-align: center;
+	padding-bottom:20px;
+}
+
+
+.center {width:800px; margin:0px auto;}
+.textCenter {text-align:center;}
+
+.mGrid {width: 100%; background-color: #fff; margin: 5px 0 10px 0; border: solid 1px #434343; border-collapse:collapse; }
+    .mGrid td { padding: 2px; border: solid 1px #c1c1c1; color: #525252; }
+    .mGrid th { padding: 4px 2px; color: #fff; background: #383838 url(grd_head.png) repeat-x top; border-left: solid 1px #434343; font-size: 0.9em; }
+.mGrid .alt { background: #fcfcfc url(grd_alt.png) repeat-x top; }
+.mGrid .pgr {background: #383838 url(grd_pgr.png) repeat-x top; }
+    .mGrid .pgr table { margin: 5px 0; }
+    .mGrid .pgr td { border-width: 0; padding: 0 6px; border-left: solid 1px #666; font-weight: bold; color: #fff; line-height: 12px; }   
+    .mGrid .pgr a { color: #666; text-decoration: none; }
+    .mGrid .pgr a:hover { color: #000; text-decoration: none; }
+    
+    
+    
+.tooltip {
+    display:none;
+    font-size:12px;
+    height:auto;
+    
+    padding:5px;
+    color:White;
+    background-color:Black;
+}
+
+.search {
+	background-color:#383838;
+    border:0;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:10px;
+	font-weight:normal;
+	padding:6px 25px;
+	text-decoration:none;
+    width:80px;
+    margin-left:2px;
+    margin-right:2px;
+    font-weight:bold;
+}.search:hover {
+	background-color:#434343;
+}.search:active {
+	position:relative;
+	top:1px;
+}
+
+.ddlist-div .ddlist {
+    border:0;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:10px;
+	font-weight:normal;
+	padding:3px 6px;
+	text-decoration:none;
+    width:108px;
+    margin-left:2px;
+    margin-right:2px;
+    background: #383838;
+    height:25px
+    }.ddlist:hover {
+	background-color:#434343;
+}
+
+.ddlist-div {
+    display:inline-block;
+   width: 80px; 
+   overflow: hidden;
+}
