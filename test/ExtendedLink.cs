@@ -23,6 +23,7 @@ namespace test
         public string Title { get { return mLink.Title; } }
         public LinkId LinkId { get { return mLink.LinkId;} }
         public LikeString Like { get; set; }
+        public string FacebookLink { get { return "http://facebook.com/" + mLink.LinkId.Value; } }
     }
     [Serializable]
     public class LikeString
