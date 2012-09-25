@@ -11,6 +11,7 @@ using System.IO;
 using System.Configuration;
 using facebook.Tables;
 using System.Globalization;
+using System.Text;
 
 namespace test
 {
@@ -160,11 +161,19 @@ namespace test
 
         protected void Stats_Click(object sender, EventArgs e)
         {
-            List<ExtendedLink> originalSource = (List<ExtendedLink>)ViewState["dataSource"];
-            
-            stats.InnerHtml = "you have " + originalSource.Count + " links";
-
-            System.Threading.Thread.Sleep(2000);
+            string statistics = string.Empty;
+            if (ViewState["stats"] != null)
+            {
+                statistics = ViewState["stats"].ToString();
+            }
+            else
+            {
+                var source = (List<ExtendedLink>)ViewState["dataSource"];
+                StatisticsBuilder statisticsBuilder = new StatisticsBuilder(source);
+                statistics = statisticsBuilder.Build();
+                ViewState["stats"] = statistics;
+            }
+            stats.InnerHtml = statistics;
         }
     }
 }

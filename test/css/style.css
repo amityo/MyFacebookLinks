@@ -88,3 +88,13 @@ h2 {
    width: 80px; 
    overflow: hidden;
 }
+
+.stats li {
+    font-size: 12px;
+    padding-bottom:6px;
+
+}
+
+    .stats li ul {
+        padding-left:20px;
+    }

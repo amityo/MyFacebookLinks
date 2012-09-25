@@ -70,13 +70,12 @@ Inherits="test._Default" %>
                                 </header>
                                 <section style="height:350px">
                                     <article>
-                                        <div id="stats" runat="server">
-
+                                        <div id="stats"  runat="server" style="margin-left:26px;margin-top:10px">
                                         </div>
                                     </article>
                                 </section>
                                 <footer class="textCenter">
-                                    thought about cool Statistics? let me know <a href="mailto:amit.yogev90@gmail.com" target="_blank">mail</a>/<a href="http://facebook.com/ayogev" target="_blank">facebook</a>
+                                    thought about a new statistics? let me know <a href="mailto:amit.yogev90@gmail.com" target="_blank">mail</a>/<a href="http://facebook.com/ayogev" target="_blank">facebook</a>
                                 </footer>
                                 <script type="text/javascript">
                                     function pageLoad() {
@@ -101,7 +100,7 @@ Inherits="test._Default" %>
                          </ItemTemplate>
                      </asp:TemplateField>
                     <asp:ImageField DataImageUrlField="Picture" ControlStyle-Width="120px" ControlStyle-Height="80px" />
-                    <asp:HyperLinkField DataNavigateUrlFields="Url" HeaderText="Title" DataTextField="Title"
+                    <asp:HyperLinkField DataNavigateUrlFields="Url" HeaderText="Title" DataTextField="Title" Target="_blank"
                     />
                     <asp:BoundField ItemStyle-CssClass="textCenter" DataField="OwnerComment" HeaderText="Comment" ReadOnly="True"
                     />

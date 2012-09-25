@@ -10,3 +10,4 @@ C:\Users\Yogev\Documents\GitHub\test\test\bin\test.dll
 C:\Users\Yogev\Documents\GitHub\test\test\bin\test.pdb
 C:\Users\Yogev\Documents\GitHub\test\test\obj\Debug\test.dll
 C:\Users\Yogev\Documents\GitHub\test\test\obj\Debug\test.pdb
+C:\Users\Yogev\Documents\GitHub\test\test\obj\Debug\test.csprojResolveAssemblyReference.cache
