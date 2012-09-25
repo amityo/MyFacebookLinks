@@ -54,10 +54,10 @@ namespace test
             builder.Append(urls.Count());
             builder.Append(" </strong> different sites");
         }
-        private void Last(StringBuilder builder)
+        private void First(StringBuilder builder)
         {
             ExtendedLink first = mSource.Last();
-            builder.Append("your latest link is <strong><a target='_blank' href='");
+            builder.Append("your first link is <strong><a target='_blank' href='");
             builder.Append(first.Url);
             builder.Append("'>");
             builder.Append(first.Title);
@@ -66,10 +66,10 @@ namespace test
             builder.Append(first.CreatedTime.Value.ToShortDateString());
             builder.Append("</strong>");
         }
-        private void First(StringBuilder builder)
+        private void Last(StringBuilder builder)
         {
             ExtendedLink last = mSource.First();
-            builder.Append("your first link is <strong><a target='_blank' href='");
+            builder.Append("your latest link is <strong><a target='_blank' href='");
             builder.Append(last.Url);
             builder.Append("'>");
             builder.Append(last.Title);
