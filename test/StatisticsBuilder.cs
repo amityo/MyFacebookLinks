@@ -57,7 +57,7 @@ namespace test
         private void Last(StringBuilder builder)
         {
             ExtendedLink first = mSource.Last();
-            builder.Append("your first link is <strong><a target='_blank' href='");
+            builder.Append("your latest link is <strong><a target='_blank' href='");
             builder.Append(first.Url);
             builder.Append("'>");
             builder.Append(first.Title);
