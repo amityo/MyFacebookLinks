@@ -17,8 +17,8 @@ namespace test
 {
     public partial class _Default : System.Web.UI.Page
     {
-        FacebookDataContext db;
-
+        FacebookQuerier mQuerier;
+        
         protected void Page_Load(object sender, EventArgs e)
         {
             GridView1.PageIndexChanging += GridView1_PageIndexChanging;
@@ -31,90 +31,54 @@ namespace test
             FacebookAuthentication auth = new FacebookAuthentication(clientId, clientSecret, mRedirectUri);
             string accessToken = auth.Login(Request.Params["code"]);
 
-            var fb = new FacebookClient(accessToken);
-            db = new FacebookDataContext(fb);
-            if (!IsPostBack)
+            mQuerier = new FacebookQuerier(accessToken);
+
+            if (ViewState["users"] == null)
             {
-                QueryFriendList();
-                QueryLinks();
+                var friends = mQuerier.FriendsList();
+                ViewState.Add("users", friends);
+            }
+            else
+            {
+                mQuerier.Friends = (Dictionary<string,string>)ViewState["users"];
+            }
+
+
+            if (ViewState["dataSource"] == null)
+            {
+                var links = mQuerier.Links();
+                ViewState.Add("dataSource", links);
+                ViewState.Add("currentDataSource", links);
+                BindGrid(links, 0);
+            }
+            else
+            {
+                mQuerier.LinksSource = (List<ExtendedLink>)ViewState["dataSource"];
             }
         }
 
-        private void QueryFriendList()
-        {
-            var friendUids = from friend in db.Friend
-                             where friend.Uid1 == db.Me
-                             select friend.Uid2;
-
-            var names = (from user in db.User
-                         where friendUids.Contains(user.Uid)
-                         select new { user.Uid, user.FirstName, user.LastName }).ToDictionary(x => x.Uid.Value, x => x.FirstName + " " + x.LastName);
-
-            ViewState.Add("users", names);
-        }
+        
 
         public void RowDataBounded(object sender, GridViewRowEventArgs eventArgs)
         {
             if (eventArgs.Row.RowType == DataControlRowType.DataRow)
             {
-                ExtendedLink elink = eventArgs.Row.DataItem as ExtendedLink;
+                ExtendedLink link = eventArgs.Row.DataItem as ExtendedLink;
                 Label likes = eventArgs.Row.FindControl("likes") as Label;
                 HtmlGenericControl tooltipDiv = eventArgs.Row.FindControl("tooltip") as HtmlGenericControl;
 
-                if (elink.Like == null)
+                if (link.Like == null)
                 {
-                    var likeQuery = (from like in db.Like
-                                     where like.ObjectId == new ObjectId(elink.LinkId.Value)
-                                     select like.UserId).ToList();
-
-                    var users = (Dictionary<string, string>)ViewState["users"];
-                    string str = string.Empty;
-                    likeQuery.ForEach(x => str += users[x.Value] + " " + "<br/>");
-                    elink.Like = new LikeString(str, likeQuery.Count);
+                    var userslikes = mQuerier.GetNamesOfUsersThatLikedTheLink(link);
+                    link.Like = new UserLikes(userslikes);
                 }
-                //var users = (from user in db.User where likeQuery.Contains(user.Uid) select new { user.FirstName, user.LastName }).ToList();
-
-                likes.Text = elink.Like.Count.ToString();
-                if (elink.Like.Count > 0)
-                    tooltipDiv.InnerHtml = elink.Like.ToString();
+                likes.Text = link.Like.Count.ToString();
+                if (link.Like.Count > 0)
+                    tooltipDiv.InnerHtml = link.Like.UserHtml();
                 else
                     tooltipDiv.Visible = false;
             }
         }
-
-        private void QueryLinks()
-        {
-            var links = (from link in db.Link
-                         where link.Owner == db.Me
-                         select link).ToList();
-
-            var extended = (from link in links
-                            orderby link.CreatedTime descending
-                            select new ExtendedLink(link)).ToList();
-
-
-
-            ManipulateLinks(extended);
-
-            ViewState.Add("dataSource", extended);
-            ViewState.Add("currentDataSource", extended);
-
-            BindGrid(extended, 0);
-        }
-
-        private void ManipulateLinks(IEnumerable<ExtendedLink> links)
-        {
-
-            foreach (var item in links)
-            {
-                if (item.Url.Contains("gdata"))
-                {
-                    item.Url = "http://www.youtube.com/watch?v=" + item.Url.Split('/').Last();
-                }
-            }
-        }
-
-
         void GridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             object source = ViewState["currentDataSource"];
@@ -123,8 +87,7 @@ namespace test
 
         public void SerachUrlClick(object sender, EventArgs eventArgs)
         {
-            List<ExtendedLink> list = (List<ExtendedLink>)ViewState["dataSource"];
-            List<ExtendedLink> currentList = FilterBySearch(list, searchDDL.Text);
+            List<ExtendedLink> currentList = mQuerier.LinksSource.FilterBy(searchBox.Text, searchDDL.Text).ToList();
             if (currentList != null)
             {
                 ViewState.Add("currentDataSource", currentList);
@@ -132,24 +95,13 @@ namespace test
             }
         }
 
-        private List<ExtendedLink> FilterBySearch(List<ExtendedLink> source, string filterBy)
-        {
-            if (filterBy == "URL")
-            {
-                return source.Where(x => x.Url.IndexOf(searchBox.Text, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
-            }
-            else if (filterBy == "Title")
-            {
-                return source.Where(x => x.Title.IndexOf(searchBox.Text, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
-            }
-            return null;
-        }
+       
+
         public void AllClicked(object sender, EventArgs eventArgs)
         {
             searchBox.Text = string.Empty;
-            object originalSource = ViewState["dataSource"];
-            ViewState.Add("currentDataSource", originalSource);
-            BindGrid(originalSource, 0);
+            ViewState.Add("currentDataSource", mQuerier.LinksSource);
+            BindGrid(mQuerier.LinksSource, 0);
         }
 
         private void BindGrid(object dataSource, int index)
@@ -168,8 +120,7 @@ namespace test
             }
             else
             {
-                var source = (List<ExtendedLink>)ViewState["dataSource"];
-                StatisticsBuilder statisticsBuilder = new StatisticsBuilder(source);
+                StatisticsBuilder statisticsBuilder = new StatisticsBuilder(mQuerier);
                 statistics = statisticsBuilder.Build();
                 ViewState["stats"] = statistics;
             }
