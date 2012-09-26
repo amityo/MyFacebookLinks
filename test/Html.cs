@@ -34,6 +34,21 @@ namespace test
         }
 
 
+
+        public void For(int from, int to,Action<int> action)
+        {
+            StartULTag();
+            for (int i = from; i < to; i++)
+            {
+                StartLITag();
+                {
+                    action(i);
+                }
+                EndLITag();
+            }
+            EndULTag();
+        }
+
         public void AddAttribute(string attribute, string value)
         {
             Builder.Remove(Builder.Length - 1, 1);

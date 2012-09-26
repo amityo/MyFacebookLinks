@@ -64,24 +64,17 @@ namespace test
             return extended;
         }
 
-        private void AllUserLikes()
+        public void AllLikes()
         {
-            LinksSource.ForEach(link =>
+            LinksSource.ForEach(x =>
             {
-                if (link.Like == null)
+                if (x.Like == null)
                 {
-                    var userslikes = GetNamesOfUsersThatLikedTheLink(link);
-                    link.Like = new UserLikes(userslikes);
+                    x.Like = new UserLikes(GetNamesOfUsersThatLikedTheLink(x));
                 }
             });
         }
 
-        public int TotalLikes()
-        {
-            AllUserLikes();
-            return LinksSource.Sum(x => x.Like.Count);
-
-        }
 
         public List<string> GetNamesOfUsersThatLikedTheLink(ExtendedLink link)
         {
@@ -91,6 +84,7 @@ namespace test
         }
 
         #region Private Methods
+       
 
         private List<Uid> GetUsersLikeByLink(ExtendedLink link)
         {
@@ -108,7 +102,7 @@ namespace test
             return names;
         }
 
-        private string GetNameByFId(string fid)
+        public string GetNameByFId(string fid)
         {
             return Friends[fid];
         }

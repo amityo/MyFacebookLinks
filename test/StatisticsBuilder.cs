@@ -23,14 +23,16 @@ namespace test
                     TotalAndDifferentUsersLikes,
                     Last,
                     First,
-                    MostPublishedSites
+                    MostPublishedSites,
+                    TopUsersThatLiked,
+                    MostLikedLink
                 };
 
         }
 
         public string Build()
         {
-            mHtmlBuilder.StartULTag();
+            mHtmlBuilder.StartULTag(); 
             mHtmlBuilder.AddAttribute("class", "stats");
             foreach (var item in mTasks)
             {
@@ -91,22 +93,47 @@ namespace test
             //              select new {temp.Key.Month,temp.Key.Year,temp,Count = temp.Count()};
         }
 
+        private List<object> mUserLikesIds;
+        private List<object> GetUsersThatLiked()
+        {
+            if (mUserLikesIds == null)
+            {
+                JsonArray users = mQuerier.QueryFql("select user_id from like where object_id in (select link_id from link where owner=me())");
+                List<object> total = new List<object>();
+                foreach (JsonObject item in users)
+                {
+                    total.AddRange(item.Values);
+                }
+                mUserLikesIds = total;
+            }
+            return mUserLikesIds;
+        }
+        
         private void TotalAndDifferentUsersLikes(StringBuilder builder)
         {
-            JsonArray result = mQuerier.QueryFql("select user_id from like where object_id in (select link_id from link where owner=me())");
-
-            List<object> total = new List<object>();
-            foreach (JsonObject item in result)
-            {
-                total.Add(item.Values.ElementAt(0));
-            }
-            
+            var users = GetUsersThatLiked();
 
             builder.Append("you received a total of <strong>");
-            builder.Append(result.Count);
+            builder.Append(users.Count);
             builder.Append("</strong> likes from <strong>");
-            builder.Append(total.Distinct().Count());
+            builder.Append(users.Distinct().Count());
             builder.Append(" </strong> different users");
+        }
+
+        public void TopUsersThatLiked(StringBuilder builder)
+        {
+            var users = GetUsersThatLiked();
+            var groupedUsers = users.GroupBy(x => x).Select(x => new { x.Key, Count = x.Count() }).OrderByDescending(x => x.Count).ToList();
+            builder.Append("top users that liked your links: ");
+            mHtmlBuilder.For(1, 4, i =>
+                {
+                    builder.Append(i);
+                    builder.Append(". <strong>");
+                    builder.Append(mQuerier.GetNameByFId(groupedUsers[i-1].Key.ToString()));
+                    builder.Append("</strong> - <strong>");
+                    builder.Append(groupedUsers[i - 1].Count);
+                    builder.Append("</strong> times");
+                });
         }
 
         private void MostPublishedSites(StringBuilder builder)
@@ -120,39 +147,51 @@ namespace test
                                         select urlss).ToList();
 
             builder.Append("most links from: ");
-            mHtmlBuilder.StartULTag();
+            mHtmlBuilder.For(1, 4, i =>
             {
-                for (int i = 1; i < 4; i++)
+                var currentUrl = urlsOrderByCount[i - 1];
+                if (currentUrl.Count == 1)
                 {
-                    mHtmlBuilder.StartLITag();
-                    {
-                        var currentUrl = urlsOrderByCount[i - 1];
-                        if (currentUrl.Count == 1)
-                        {
-                            int oneUrl = urlsOrderByCount.Where(x => x.Count == 1).Count();
-                            builder.Append("<strong>");
-                            builder.Append(oneUrl);
-                            builder.Append("</strong>");
-                            builder.Append(" sites with <strong>1</strong> link");
-                            break;
-                        }
-                        else
-                        {
-                            builder.Append("<strong>");
-                            builder.Append(currentUrl.Count);
-                            builder.Append(" </strong> links from ");
-                            builder.Append("<strong><a target='_blank' href='");
-                            builder.Append(currentUrl.Url);
-                            builder.Append("'>");
-                            builder.Append(currentUrl.Url);
-                            builder.Append("</a></strong>");
-                        }
-                    }
-                    mHtmlBuilder.EndLITag();
-
+                    int oneUrl = urlsOrderByCount.Where(x => x.Count == 1).Count();
+                    builder.Append("<strong>");
+                    builder.Append(oneUrl);
+                    builder.Append("</strong>");
+                    builder.Append(" sites with <strong>1</strong> link");
+                    return;
                 }
+                else
+                {
+                    builder.Append("<strong>");
+                    builder.Append(currentUrl.Count);
+                    builder.Append(" </strong> links from ");
+                    builder.Append("<strong><a target='_blank' href='");
+                    builder.Append(currentUrl.Url);
+                    builder.Append("'>");
+                    builder.Append(currentUrl.Url);
+                    builder.Append("</a></strong>");
+                }
+            });
+        }
+        private void MostLikedLink(StringBuilder builder)
+        {
+            JsonArray users = mQuerier.QueryFql("select object_id from like where object_id in (select link_id from link where owner=me())");
+            List<object> total = new List<object>();
+            foreach (JsonObject item in users)
+            {
+                total.AddRange(item.Values);
             }
-            mHtmlBuilder.EndULTag();
+            var most = total.GroupBy(x => x).Select(x => new { Key = x.Key.ToString(), Count = x.Count() }).OrderByDescending(x=>x.Count).First();
+            var mostLikedLink = mQuerier.LinksSource.First(x => x.LinkId.Value == most.Key);
+
+            builder.Append("most liked link is: <strong>");
+            builder.Append("<a  target='_blank' href='");
+            builder.Append(mostLikedLink.Url);
+            builder.Append("'>");
+            builder.Append(mostLikedLink.Title);
+            builder.Append("</a></strong> with <strong>");
+            builder.Append(most.Count);
+            builder.Append(" <strong>likes");
+
         }
     }
 }
