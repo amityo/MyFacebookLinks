@@ -137,8 +137,25 @@ namespace test
                 return;
             }
             var groupedUsers = users.GroupBy(x => x).Select(x => new { x.Key, Count = x.Count() }).OrderByDescending(x => x.Count).ToList();
+
+            int to = 0;
+            if (groupedUsers == null || groupedUsers.Count == 0)
+            {
+                return;
+
+            }
+            else if (groupedUsers.Count > 0 && groupedUsers.Count < 3)
+            {
+                to = groupedUsers.Count + 1;
+            }
+            else
+            {
+                to = 4;
+            }
+
+
             builder.Append("top users that liked your links: ");
-            mHtmlBuilder.For(1, 4, i =>
+            mHtmlBuilder.For(1, to, i =>
                 {
                     builder.Append(i);
                     builder.Append(". <strong>");
@@ -158,9 +175,22 @@ namespace test
                                         into urlss
                                         orderby urlss.Count descending
                                         select urlss).ToList();
-
+            int to = 0;
+            if (urlsOrderByCount == null || urlsOrderByCount.Count == 0)
+            {
+                return;
+                
+            }
+            else if (urlsOrderByCount.Count > 0 && urlsOrderByCount.Count < 3)
+            {
+                to = urlsOrderByCount.Count + 1;
+            }
+            else
+            {
+                to = 4;
+            }
             builder.Append("most links from: ");
-            mHtmlBuilder.For(1, 4, i =>
+            mHtmlBuilder.For(1, to, i =>
             {
                 var currentUrl = urlsOrderByCount[i - 1];
                 if (currentUrl.Count == 1)
