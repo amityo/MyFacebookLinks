@@ -223,8 +223,18 @@ namespace test
             {
                 total.AddRange(item.Values);
             }
-            var most = total.GroupBy(x => x).Select(x => new { Key = x.Key.ToString(), Count = x.Count() }).OrderByDescending(x=>x.Count).First();
-            var mostLikedLink = mQuerier.LinksSource.First(x => x.LinkId.Value == most.Key);
+            var most = total.GroupBy(x => x).Select(x => new { Key = x.Key.ToString(), Count = x.Count() }).OrderByDescending(x=>x.Count);
+            if (most == null || most.Count() == 0)
+            {
+                return;
+            }
+            var most2 = most.First();
+
+            var mostLikedLink = mQuerier.LinksSource.First(x => x.LinkId.Value == most2.Key);
+            if (mostLikedLink == null)
+            {
+                return;
+            }
 
             builder.Append("most liked link is: <strong>");
             builder.Append("<a  target='_blank' href='");
@@ -232,7 +242,7 @@ namespace test
             builder.Append("'>");
             builder.Append(mostLikedLink.Title);
             builder.Append("</a></strong> with <strong>");
-            builder.Append(most.Count);
+            builder.Append(most2.Count);
             builder.Append(" <strong>likes");
 
         }
