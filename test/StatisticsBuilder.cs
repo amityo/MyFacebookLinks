@@ -54,9 +54,11 @@ namespace test
 
             var urls = (from link in mQuerier.LinksSource
                         select new Uri(link.Url).GetLeftPart(UriPartial.Authority)).GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
-
-            builder.Append(urls.Count());
-            builder.Append(" </strong> different sites");
+            if (urls != null)
+            {
+                builder.Append(urls.Count());
+                builder.Append(" </strong> different sites");
+            }
         }
 
 
