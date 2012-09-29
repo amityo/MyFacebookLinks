@@ -56,8 +56,25 @@ namespace test
             builder.Append(mQuerier.LinksSource.Count);
             builder.Append("</strong> links from <strong>");
 
-            var urls = (from link in mQuerier.LinksSource
-                        select new Uri(link.Url).GetLeftPart(UriPartial.Authority)).GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
+
+            var links = new List<string>();
+            foreach (var link in mQuerier.LinksSource)
+            {
+                Uri uri;
+                try     
+                {
+                    uri = new Uri(link.Url);
+                }
+                catch
+                {
+                    continue;
+                }
+                links.Add(uri.GetLeftPart(UriPartial.Authority));
+            }
+            var urls = links.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
+
+            //var urls = (from link in mQuerier.LinksSource
+            //            select new Uri(link.Url).GetLeftPart(UriPartial.Authority)).GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
             if (urls != null)
             {
                 builder.Append(urls.Count());
@@ -168,8 +185,23 @@ namespace test
 
         private void MostPublishedSites(StringBuilder builder)
         {
-            var urls = (from link in mQuerier.LinksSource
-                        select new Uri(link.Url).GetLeftPart(UriPartial.Authority)).GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
+            var links = new List<string>();
+            foreach (var link in mQuerier.LinksSource)
+            {
+                Uri uri;
+                try
+                {
+                    uri = new Uri(link.Url);
+                }
+                catch
+                {
+                    continue;
+                }
+                links.Add(uri.GetLeftPart(UriPartial.Authority));
+            }
+            var urls = links.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
+            //var urls = (from link in mQuerier.LinksSource
+            //            select new Uri(link.Url).GetLeftPart(UriPartial.Authority)).GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
             var urlsOrderByCount = (from url in urls
                                     select new { Url = url.Key, Count = url.Count() }
                                         into urlss
