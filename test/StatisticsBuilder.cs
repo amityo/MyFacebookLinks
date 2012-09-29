@@ -32,6 +32,10 @@ namespace test
 
         public string Build()
         {
+            if (mQuerier.LinksSource.Count == 0)
+            {
+                return "you don't have any links :(";
+            }
             mHtmlBuilder.StartULTag(); 
             mHtmlBuilder.AddAttribute("class", "stats");
             foreach (var item in mTasks)
@@ -114,7 +118,10 @@ namespace test
         private void TotalAndDifferentUsersLikes(StringBuilder builder)
         {
             var users = GetUsersThatLiked();
-
+            if (users == null || users.Count == 0)
+            {
+                return;
+            }
             builder.Append("you received a total of <strong>");
             builder.Append(users.Count);
             builder.Append("</strong> likes from <strong>");
@@ -125,6 +132,10 @@ namespace test
         public void TopUsersThatLiked(StringBuilder builder)
         {
             var users = GetUsersThatLiked();
+            if (users == null || users.Count == 0)
+            {
+                return;
+            }
             var groupedUsers = users.GroupBy(x => x).Select(x => new { x.Key, Count = x.Count() }).OrderByDescending(x => x.Count).ToList();
             builder.Append("top users that liked your links: ");
             mHtmlBuilder.For(1, 4, i =>
