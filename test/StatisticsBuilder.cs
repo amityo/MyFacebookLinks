@@ -67,6 +67,7 @@ namespace test
                 }
                 catch
                 {
+                    builder.Append(link.Url + " baaaa ");
                     continue;
                 }
                 links.Add(uri.GetLeftPart(UriPartial.Authority));
