@@ -60,17 +60,14 @@ namespace test
             var links = new List<string>();
             foreach (var link in mQuerier.LinksSource)
             {
-                Uri uri;
                 try     
                 {
-                    uri = new Uri(link.Url);
+                    Uri uri = new Uri(link.Url);
+                    links.Add(uri.GetLeftPart(UriPartial.Authority));
                 }
                 catch
                 {
-                    builder.Append(link.Url + " baaaa ");
-                    continue;
                 }
-                links.Add(uri.GetLeftPart(UriPartial.Authority));
             }
             var urls = links.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
 

@@ -104,7 +104,12 @@ namespace test
 
         public string GetNameByFId(string fid)
         {
-            return Friends[fid];
+            string result;
+            if(Friends.TryGetValue(fid,out result))
+            {
+               return result;
+            }
+            return string.Empty;
         }
 
         public dynamic QueryFql(string query)
