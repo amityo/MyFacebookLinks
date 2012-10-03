@@ -29,8 +29,8 @@ namespace test
             string clientSecret = ConfigurationManager.AppSettings[prefix + "_clientSecret"];
 
             FacebookAuthentication auth = new FacebookAuthentication(clientId, clientSecret, mRedirectUri);
-            string accessToken = auth.Login(Request.Params["code"]);
-
+            //string accessToken = auth.Login(Request.Params["code"]);
+            string accessToken = auth.Login("AQCHwpz8JfD6pKWoE7BpKFI9PE0PBOR4ofhgZLH4jT9fRbozX_dnle-VqMIWwNaiB5HmQag_wzSRKXyOFyUMdAy48YP7kyoGjj9Uf8e2qpwe2mHn4gl1aResQ10ZgEJY9eon530AMSYG5O9W8O4W9tARsZi0AjY8KGZhmDOM9TcOkksDwaLlgMs5tcdBX501aTPRQMtl7X1ccXrC5n6hDaKv");
             mQuerier = new FacebookQuerier(accessToken);
 
             if (ViewState["users"] == null)
@@ -69,8 +69,9 @@ namespace test
 
                 if (link.Like == null)
                 {
-                    var userslikes = mQuerier.GetNamesOfUsersThatLikedTheLink(link);
-                    link.Like = new UserLikes(userslikes);
+                    //var userslikes = mQuerier.GetNamesOfUsersThatLikedTheLink(link);
+                    //link.Like = new UserLikes(userslikes);
+                    Console.WriteLine();
                 }
                 likes.Text = link.Like.Count.ToString();
                 if (link.Like.Count > 0)
@@ -106,6 +107,15 @@ namespace test
 
         private void BindGrid(object dataSource, int index)
         {
+            List<ExtendedLink> list = (List<ExtendedLink>)dataSource;
+            for (int i = index * 10; i < index * 10 + 10; i++)
+            {
+                if (list[i].Like == null)
+                {
+                    var userslikes = mQuerier.GetNamesOfUsersThatLikedTheLink(list[i]);
+                    list[i].Like = new UserLikes(userslikes);
+                }
+            }
             GridView1.DataSource = dataSource;
             GridView1.PageIndex = index;
             GridView1.DataBind();

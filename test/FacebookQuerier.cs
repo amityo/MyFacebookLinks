@@ -45,6 +45,8 @@ namespace test
             var friends = (from user in LinfQuery.User
                          where friendUids.Contains(user.Uid)
                          select new { user.Uid, user.FirstName, user.LastName }).ToDictionary(x => x.Uid.Value, x => x.FirstName + " " + x.LastName);
+
+            
             Friends = friends;
             return friends;
         }
@@ -79,12 +81,35 @@ namespace test
         public List<string> GetNamesOfUsersThatLikedTheLink(ExtendedLink link)
         {
             var uids = GetUsersLikeByLink(link);
-            return GetUsersNames(uids);
+            List<Uid> unknown = new List<Uid>();
+            List<string> names = GetUsersNames(uids,out unknown);
+            if (unknown.Count > 0)
+            {
+                names.AddRange(GetNotFriendsNames(unknown));
+            }
+            return names;
 
         }
 
         #region Private Methods
-       
+
+        private List<string> GetNotFriendsNames(List<Uid> unknownUids)
+        {
+            List<string> uidsStrings = unknownUids.Select(x => x.Value).ToList();
+            List<string> names = new List<string>();
+
+            string concats = string.Join(", ", uidsStrings);
+            string query = string.Format("select uid,first_name,last_name from user where uid in({0})", concats);
+            var result = QueryFql(query);
+            for (int i = 0; i < result.Count; i++)
+            {
+                string name = result[i]["first_name"] + " " + result[i]["last_name"];
+                string id = result[i]["uid"].ToString();
+                Friends.Add(id, name);
+                names.Add(name);
+            }
+            return names;
+        }
 
         private List<Uid> GetUsersLikeByLink(ExtendedLink link)
         {
@@ -95,10 +120,23 @@ namespace test
 
 
 
-        private List<string> GetUsersNames(List<Uid> uids)
+        private List<string> GetUsersNames(List<Uid> uids,out List<Uid> unknown)
         {
             List<string> names = new List<string>();
-            uids.ForEach(fid => names.Add(GetNameByFId(fid.Value)));
+            List<Uid> unknown1 = new List<Uid>();
+            uids.ForEach(fid => 
+            {
+                string name = GetNameByFId(fid.Value);
+                if(name == string.Empty)
+                {
+                    unknown1.Add(fid);
+                }
+                else
+                {
+                    names.Add(name);
+                }
+            });
+            unknown = unknown1;
             return names;
         }
 
