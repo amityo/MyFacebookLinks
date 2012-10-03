@@ -29,8 +29,8 @@ namespace test
             string clientSecret = ConfigurationManager.AppSettings[prefix + "_clientSecret"];
 
             FacebookAuthentication auth = new FacebookAuthentication(clientId, clientSecret, mRedirectUri);
-            //string accessToken = auth.Login(Request.Params["code"]);
-            string accessToken = auth.Login("AQCHwpz8JfD6pKWoE7BpKFI9PE0PBOR4ofhgZLH4jT9fRbozX_dnle-VqMIWwNaiB5HmQag_wzSRKXyOFyUMdAy48YP7kyoGjj9Uf8e2qpwe2mHn4gl1aResQ10ZgEJY9eon530AMSYG5O9W8O4W9tARsZi0AjY8KGZhmDOM9TcOkksDwaLlgMs5tcdBX501aTPRQMtl7X1ccXrC5n6hDaKv");
+            string accessToken = auth.Login(Request.Params["code"]);
+            //string accessToken = auth.Login("AQCHwpz8JfD6pKWoE7BpKFI9PE0PBOR4ofhgZLH4jT9fRbozX_dnle-VqMIWwNaiB5HmQag_wzSRKXyOFyUMdAy48YP7kyoGjj9Uf8e2qpwe2mHn4gl1aResQ10ZgEJY9eon530AMSYG5O9W8O4W9tARsZi0AjY8KGZhmDOM9TcOkksDwaLlgMs5tcdBX501aTPRQMtl7X1ccXrC5n6hDaKv");
             mQuerier = new FacebookQuerier(accessToken);
 
             if (ViewState["users"] == null)
