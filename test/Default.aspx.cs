@@ -115,7 +115,10 @@ namespace test
                     LinkToInit.Add(source[i]);
                 }
             }
-            mQuerier.GetNamesOfUsersThatLikedTheLink2(LinkToInit);
+            if (LinkToInit.Count > 0)
+            {
+                mQuerier.GetNamesOfUsersThatLikedTheLink2(LinkToInit);
+            }
             
         }
 
