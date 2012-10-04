@@ -105,17 +105,23 @@ namespace test
             BindGrid(mQuerier.LinksSource, 0);
         }
 
-        private void BindGrid(object dataSource, int index)
+        private void InitLikes(List<ExtendedLink> source,int index)
         {
-            List<ExtendedLink> list = (List<ExtendedLink>)dataSource;
+            var LinkToInit = new List<ExtendedLink>();
             for (int i = index * 10; i < index * 10 + 10; i++)
             {
-                if (list[i].Like == null)
+                if (source[i].Like == null)
                 {
-                    var userslikes = mQuerier.GetNamesOfUsersThatLikedTheLink(list[i]);
-                    list[i].Like = new UserLikes(userslikes);
+                    LinkToInit.Add(source[i]);
                 }
             }
+            mQuerier.GetNamesOfUsersThatLikedTheLink2(LinkToInit);
+            
+        }
+
+        private void BindGrid(object dataSource, int index)
+        {
+            InitLikes(dataSource as List<ExtendedLink>, index);
             GridView1.DataSource = dataSource;
             GridView1.PageIndex = index;
             GridView1.DataBind();

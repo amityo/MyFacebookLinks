@@ -72,33 +72,69 @@ namespace test
             {
                 if (x.Like == null)
                 {
-                    x.Like = new UserLikes(GetNamesOfUsersThatLikedTheLink(x));
+                    //x.Like = new UserLikes(GetNamesOfUsersThatLikedTheLink(x));
                 }
             });
         }
 
 
-        public List<string> GetNamesOfUsersThatLikedTheLink(ExtendedLink link)
-        {
-            var uids = GetUsersLikeByLink(link);
-            List<Uid> unknown = new List<Uid>();
-            List<string> names = GetUsersNames(uids,out unknown);
-            if (unknown.Count > 0)
-            {
-                names.AddRange(GetNotFriendsNames(unknown));
-            }
-            return names;
+        //public List<string> GetNamesOfUsersThatLikedTheLink(ExtendedLink link)
+        //{
+        //    var uids = GetUsersLikeByLink(link);
+        //    List<Uid> unknown = new List<Uid>();
+        //    List<string> names = GetUsersNames(uids,out unknown);
+        //    if (unknown.Count > 0)
+        //    {
+        //        names.AddRange(GetNotFriendsNames(unknown));
+        //    }
+        //    return names;
 
+        //}
+
+        public void GetNamesOfUsersThatLikedTheLink2(List<ExtendedLink> link)
+        {
+            var linkIds = link.Select(x => x.LinkId.Value);
+            string concat = string.Join(", ", linkIds);
+            string query = string.Format("select object_id,user_id from like where object_id in ({0})", concat);
+            dynamic result = QueryFql(query);
+            Dictionary<string, List<string>> linkIdToLikes = new Dictionary<string, List<string>>();
+            foreach (var item in result)
+            {
+                string linkId = item["object_id"].ToString();
+                string userId = item["user_id"].ToString();
+                if (linkIdToLikes.ContainsKey(linkId))
+                {
+                    linkIdToLikes[linkId].Add(userId);
+                }
+                else
+                {
+                    linkIdToLikes.Add(linkId,new List<string>{userId});
+                }
+            }
+            foreach (var item in link)
+            {
+                List<string> names = new List<string>();
+                if (linkIdToLikes.ContainsKey(item.LinkId.Value))
+                {
+                    List<string> unknown;
+                    names = GetUsersNames(linkIdToLikes[item.LinkId.Value], out unknown);
+                    if (unknown.Count > 0)
+                    {
+                        names.AddRange(GetNotFriendsNames(unknown));
+                    }
+                    
+                }
+                item.Like = new UserLikes(names);
+            }
         }
 
         #region Private Methods
 
-        private List<string> GetNotFriendsNames(List<Uid> unknownUids)
+        private List<string> GetNotFriendsNames(List<string> unknownUids)
         {
-            List<string> uidsStrings = unknownUids.Select(x => x.Value).ToList();
             List<string> names = new List<string>();
 
-            string concats = string.Join(", ", uidsStrings);
+            string concats = string.Join(", ", unknownUids);
             string query = string.Format("select uid,first_name,last_name from user where uid in({0})", concats);
             var result = QueryFql(query);
             for (int i = 0; i < result.Count; i++)
@@ -120,13 +156,13 @@ namespace test
 
 
 
-        private List<string> GetUsersNames(List<Uid> uids,out List<Uid> unknown)
+        private List<string> GetUsersNames(List<string> uids,out List<string> unknown)
         {
             List<string> names = new List<string>();
-            List<Uid> unknown1 = new List<Uid>();
+            List<string> unknown1 = new List<string>();
             uids.ForEach(fid => 
             {
-                string name = GetNameByFId(fid.Value);
+                string name = GetNameByFId(fid);
                 if(name == string.Empty)
                 {
                     unknown1.Add(fid);
