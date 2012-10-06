@@ -31,6 +31,7 @@ namespace test
             FacebookAuthentication auth = new FacebookAuthentication(clientId, clientSecret, mRedirectUri);
             string accessToken = auth.Login(Request.Params["code"]);
             //string accessToken = auth.Login("AQCHwpz8JfD6pKWoE7BpKFI9PE0PBOR4ofhgZLH4jT9fRbozX_dnle-VqMIWwNaiB5HmQag_wzSRKXyOFyUMdAy48YP7kyoGjj9Uf8e2qpwe2mHn4gl1aResQ10ZgEJY9eon530AMSYG5O9W8O4W9tARsZi0AjY8KGZhmDOM9TcOkksDwaLlgMs5tcdBX501aTPRQMtl7X1ccXrC5n6hDaKv");
+            //string accessToken = auth.Login("AQA60liWXgCNUH0CiWCw7M_-xgyU08eR2EEVQXxPpYNfVBCl00MfTJxXRf0UrDyliUCI0QGlzUPI8IMIK7pMrp67CVJfKieHBUDNQWOj6EvYhiQdNr1bEl--BGVfPIOJY9cnLdffzgFR7f4hVGKLQM5VpGbGrSCOBqzXhEDk4BQ2WBx_4H8pOh_vWEi09RZHMknDA_TdmP629-h4_4Iit-ve");
             mQuerier = new FacebookQuerier(accessToken);
 
             if (ViewState["users"] == null)
@@ -47,6 +48,7 @@ namespace test
             if (ViewState["dataSource"] == null)
             {
                 var links = mQuerier.Links();
+                
                 ViewState.Add("dataSource", links);
                 ViewState.Add("currentDataSource", links);
                 BindGrid(links, 0);
@@ -108,7 +110,7 @@ namespace test
         private void InitLikes(List<ExtendedLink> source,int index)
         {
             var LinkToInit = new List<ExtendedLink>();
-            for (int i = index * 10; i < index * 10 + 10; i++)
+            for (int i = index * 10; i < index * 10 + 10 && i < source.Count; i++)
             {
                 if (source[i].Like == null)
                 {
@@ -124,7 +126,13 @@ namespace test
 
         private void BindGrid(object dataSource, int index)
         {
-            InitLikes(dataSource as List<ExtendedLink>, index);
+            var links = dataSource as List<ExtendedLink>;
+            if (links.Count == 0)
+            {
+                none.InnerText = "You don't have any links :( ";
+                return;
+            }
+            InitLikes(links, index);
             GridView1.DataSource = dataSource;
             GridView1.PageIndex = index;
             GridView1.DataBind();

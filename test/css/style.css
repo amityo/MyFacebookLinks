@@ -98,3 +98,10 @@ h2 {
     .stats li ul {
         padding-left:20px;
     }
+
+.none {
+    text-align:center;
+    font-size:14px;
+    font-weight:bold;
+    margin-top:20px;
+}

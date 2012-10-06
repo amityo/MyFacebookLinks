@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs"
+
 Inherits="test._Default" %>
   <!DOCTYPE html>
   <html lang="en">
@@ -88,6 +89,7 @@ Inherits="test._Default" %>
                 </div>
             </header>
             <article>
+                <div runat="server" id="none" class="none"></div>
                 <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True"
                 AutoGenerateColumns="False" GridLines="None" CssClass="mGrid" PagerStyle-CssClass="pgr"
                 RowStyle-CssClass="alt" OnRowDataBound="RowDataBounded">

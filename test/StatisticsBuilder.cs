@@ -34,6 +34,7 @@ namespace test
         {
             if (mQuerier.LinksSource.Count == 0)
             {
+                System.Threading.Thread.Sleep(1500);
                 return "you don't have any links :(";
             }
             mHtmlBuilder.StartULTag(); 
