@@ -148,12 +148,9 @@ namespace test
             }
             else
             {
-                System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
                 StatisticsBuilder statisticsBuilder = new StatisticsBuilder(mQuerier);
                 statistics = statisticsBuilder.Build();
                 ViewState["stats"] = statistics;
-                watch.Stop();
-                Console.WriteLine(watch.Elapsed);
             }
             stats.InnerHtml = statistics;
         }
