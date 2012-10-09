@@ -32,6 +32,7 @@ namespace test
             string accessToken = auth.Login(Request.Params["code"]);
             //string accessToken = auth.Login("AQCHwpz8JfD6pKWoE7BpKFI9PE0PBOR4ofhgZLH4jT9fRbozX_dnle-VqMIWwNaiB5HmQag_wzSRKXyOFyUMdAy48YP7kyoGjj9Uf8e2qpwe2mHn4gl1aResQ10ZgEJY9eon530AMSYG5O9W8O4W9tARsZi0AjY8KGZhmDOM9TcOkksDwaLlgMs5tcdBX501aTPRQMtl7X1ccXrC5n6hDaKv");
             //string accessToken = auth.Login("AQA60liWXgCNUH0CiWCw7M_-xgyU08eR2EEVQXxPpYNfVBCl00MfTJxXRf0UrDyliUCI0QGlzUPI8IMIK7pMrp67CVJfKieHBUDNQWOj6EvYhiQdNr1bEl--BGVfPIOJY9cnLdffzgFR7f4hVGKLQM5VpGbGrSCOBqzXhEDk4BQ2WBx_4H8pOh_vWEi09RZHMknDA_TdmP629-h4_4Iit-ve");
+            //string accessToken = auth.Login("AQCPDTuX1fnhA0-QY3tYjQ1UlvEs45m-0ppKfSN_5iupt-kj8nVF_hHkrQsnLhV9bnzTBfoe8V0ceC0Lxfi_O72ZzxhZPFKCVAVE3vQJE5saM2cWeZBPlc9znQPsJyiciOLMTLDO9TvtbhCLwl7lcaz5W2BMkSj39Ohp7vjIEhSTCbuyorfnO_yAVE1__zy0Y_mwExtS80Fg3H8U4HQ51pH9");
             mQuerier = new FacebookQuerier(accessToken);
 
             if (ViewState["users"] == null)
@@ -147,9 +148,12 @@ namespace test
             }
             else
             {
+                System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
                 StatisticsBuilder statisticsBuilder = new StatisticsBuilder(mQuerier);
                 statistics = statisticsBuilder.Build();
                 ViewState["stats"] = statistics;
+                watch.Stop();
+                Console.WriteLine(watch.Elapsed);
             }
             stats.InnerHtml = statistics;
         }

@@ -51,6 +51,31 @@ namespace test
             return mHtmlBuilder.ToString();
         }
 
+        private List<string> mUrls;
+        private List<string> GetUrls()
+        {
+            if (mUrls == null)
+            {
+                var links = new List<string>();
+                foreach (var link in mQuerier.LinksSource)
+                {
+                    if (link.Url.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        try
+                        {
+                            Uri uri = new Uri(link.Url);
+                            links.Add(uri.GetLeftPart(UriPartial.Authority));
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                }
+                mUrls = links;
+            }
+            return mUrls;
+        }
         private void LinksCount(StringBuilder builder)
         {
             builder.Append("you published <strong>");
@@ -58,18 +83,8 @@ namespace test
             builder.Append("</strong> links from <strong>");
 
 
-            var links = new List<string>();
-            foreach (var link in mQuerier.LinksSource)
-            {
-                try     
-                {
-                    Uri uri = new Uri(link.Url);
-                    links.Add(uri.GetLeftPart(UriPartial.Authority));
-                }
-                catch
-                {
-                }
-            }
+            var links = GetUrls();
+            
             var urls = links.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
 
             //var urls = (from link in mQuerier.LinksSource
@@ -184,20 +199,8 @@ namespace test
 
         private void MostPublishedSites(StringBuilder builder)
         {
-            var links = new List<string>();
-            foreach (var link in mQuerier.LinksSource)
-            {
-                Uri uri;
-                try
-                {
-                    uri = new Uri(link.Url);
-                }
-                catch
-                {
-                    continue;
-                }
-                links.Add(uri.GetLeftPart(UriPartial.Authority));
-            }
+            var links = GetUrls();
+          
             var urls = links.GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
             //var urls = (from link in mQuerier.LinksSource
             //            select new Uri(link.Url).GetLeftPart(UriPartial.Authority)).GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase);
